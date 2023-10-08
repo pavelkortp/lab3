@@ -20,81 +20,28 @@
 Хід виконання
 
 Створіть клас ферми у новому файлі Farm.cs. У нас є приватне поле :
-public class Farm
-{
-private int _plantsLimit;
-public string Name { get; set; }
-public int PlantsLimit =&gt; _plantsLimit;
-}
+
 Створіть запис рослини в файлі Plant.cs:
-public class Plant
-{
-public string ShortName { get; }
-public string FullName { get; }
-public int GrowingTime { get; }
-public bool IsNeedRegrow { get; }
-}
-Створіть клас Farmer.cs:
-public class Farmer
-{
-public string FirstName { get; set; }
-public string LastName { get; set; }
-public string Specialization { get; set; }
-}
+
+
 Розширте клас Farm публічними властивостями PlantsOnGrowning, Farmer
 із типами List&lt;Plant&gt;, Farmer відповідно. Зверніть увагу що PlantOnGrowing
 доступний лише для читання, а фермера можна можна присвоїти лише
 зсередини.
-public List&lt;Plant&gt; PlantsOnGrowing { get; }
-public Farmer? Farmer { get; private set; }
-Створіть конструктори у класі Farm.cs:
-public Farm() : this(&quot;Farm&quot;)
 
-{}
-public Farm(string name) : this(name, 20)
-{}
-public Farm(string name, int limit) : this(name, limit, null)
-{ }
-public Farm(string name, int limit, Farmer? farmer)
-{
-_plantsLimit = limit;
-PlantsOnGrowing = new List&lt;Plant&gt;(20);
-Farmer = farmer;
-}
 Як ми бачимо, дані конструктори перевикористовують один одного заради
 усунення дублювання коду. Створіть по одному простому конструктору для
 записів Plant та Farmer, які будуть ініціалізовувати їх властивості. Обрати
 модифікатори доступу для них на власний розсуд[0.5].
 Тепер створимо методи для роботи з нашим господарством в класі Farm:
  Метод для додання рослини на вирощення:
-public bool AddPlant(Plant plant)
-{
-if (PlantsOnGrowing.Count == PlantsLimit)
-{
-return false;
-}
-PlantsOnGrowing.Add(plant);
-return true;
-}
+
  Метод для пошуку рослини (я використав класичний підхід.
 Перепишіть метод використовуючи метод класу List для пошуку
 елемента Find) [0.5]:
-public Plant? FindByPlantName(string name)
-{
-foreach (var plant in PlantsOnGrowing)
-{
-if (plant.ShortName == name || plant.FullName == name)
-{
-return plant;
-}
-}
-return null;
-}
+
  Метод для видалення рослини:
-public bool DeletePlant(Plant plant)
-{
-return PlantsOnGrowing.Remove(plant);
-}
+
 Додайте публічний метод для призначення нового фермера. Метод
 приймає об’єкт нового фермера і нічого не повертає[0.5].
 
@@ -117,14 +64,7 @@ public abstract class Plant
 Після того як з моменту додання рослини пройде час, що зазначено в
 Plant.GrowingTime автоматично активувати подію PlantGrown, яка
 приймає у якості Event Args клас PlantGrownEventArgs:
-public class PlantGrownEventArgs
-{
-public Plant Plant { get; }
-public PlantGrownEventArgs(Plant plant)
-{
-Plant = plant;
-}
-}
+
 Обробником події повинен бути метод у класі Farmer, що назначений
 на дану ферму. Після спрацьовування події фермер повинен
 вилучити рослину і посадити нову (того ж типу). Якщо рослина не
